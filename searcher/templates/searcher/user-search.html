@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load static %}
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="searcher">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} Filer {% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}/favicon.ico" />
+    <!-- Custom fonts for this template-->
+    <script defer src="{% static 'searcher/vendor/font-awesome/fontawesome-all.js' %}"></script>
+  </head>
+
+
+  <body>
+
+    <form action="/create_post/" method="GET" id="search-form">
+      {{ form.search }}
+      <button type="submit"><i class="fa fa-search"></i></button>
+      <div id="results"></div> <!-- errors go here -->
+    </form>
+
+    <!-- Here is code for displaying search results -->
+    <ul id=search_result>
+
+    </ul>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'searcher/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'searcher/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'searcher/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+
+    <!-- ajax for dynamic search -->
+    <script>
+        // AJAX for posting
+        function search() {
+            console.log("search is working!") // sanity check
+            $.ajax({
+                url : "{% url 'searcher:search_ajax' %}", // the endpoint
+                type : "GET", // http method
+                data : { search_text : $('#search-text').val() }, // data sent with the post request
+
+                // handle a successful response
+                success : function(json) {
+                    $('#search-text').val(''); // remove the value from the input
+                    console.log(json); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                    var folders = "";
+                    for (var f in json.folders)
+                    {
+                        folders = folders + "<li> Папка: " + json.folders[f].name + "</li>";
+                    }
+                    var files = "";
+                    for (var f in json.files)
+                    {
+                        files = files + "<li> Файл: " + json.files[f].name + "</li>";
+                    }
+                    $('#search_result').empty();
+                    $('#search_result').append(folders, files);
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+
+        // Submi search on submit
+        $('#search-form').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            search();
+        });
+
+    </script>
+
+  </body>
+</html>

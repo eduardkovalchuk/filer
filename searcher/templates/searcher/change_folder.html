@@ -1,0 +1,34 @@
+{% extends 'searcher/base.html' %}
+
+{% block title %} Редагувати {{ folder.name }} {% endblock %}
+
+{% block change_folder %}
+
+{% load searcher_extras %}
+
+{% load static %}
+
+<p></p>
+
+<form method="post" action="">
+{% csrf_token %}
+
+        <table align="center">
+            <tr>
+                <td> {{ form.name.label }} </td> <td> {{ form.name }} </td>
+            </tr>
+            <tr>
+                <td> {{ form.tags.label }} </td> <td> {{ form.tags }} </td>
+            </tr>
+            <tr>
+                <td> <p> </td>
+            </tr>
+            <tr>
+                <td> <input type="submit" value="Зберегти" class="btn btn-outline-success"> </td>
+                <td> <a href="{% url 'searcher:view_folder' folder.parrent.id %}" ><button type="button" class="btn btn-outline-secondary">Відміна</button></a> </td>
+            </tr>
+        </table>
+
+</form>
+
+{% endblock %}

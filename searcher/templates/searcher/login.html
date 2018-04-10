@@ -1,0 +1,25 @@
+{% extends 'searcher/base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block login %}
+
+{% load static %}
+
+
+<div style="text-align:center">
+  <form method="post" action="">
+    
+    {% csrf_token %}
+
+    <table align="center">
+      {{form.as_table}}
+      <tr>
+        <td colspan="2"> <button type="submit">Вхід</button></td>
+      </tr>
+    </table>
+
+  </form>
+</div>
+
+{% endblock %}
