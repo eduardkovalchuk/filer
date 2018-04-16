@@ -38,6 +38,7 @@ def add_folder(request, context):
             else:
                 new_folder = Folder(name=name, tags=tags, parrent=None)
             new_folder.save()
+            new_folder.real_create()
             files = tupalize(File.objects.filter(parrent__id=current_folder_id), "file_")
             folders = tupalize(Folder.objects.filter(parrent__id=current_folder_id), "folder_")
             delete_form = DeleteForm(request.POST or None, folders=folders, files=files)
@@ -68,12 +69,13 @@ def delete(request, context):
     current_folder_id = context["current_folder_id"]
     if context["delete_form"].is_valid():
         cleaned_data = context["delete_form"].cleaned_data
-        for folder, folder_field in context["folders"]:
-            if folder_field in request.POST:
-                folder.delete()
         for file_, file_field in context["files"]:
             if file_field in request.POST:
                 file_.delete()
+        for folder, folder_field in context["folders"]:
+            if folder_field in request.POST:
+                folder.delete()
+                folder.real_delete()
         files = tupalize(File.objects.filter(parrent__id=current_folder_id), "file_")
         folders = tupalize(Folder.objects.filter(parrent__id=current_folder_id), "folder_")
         delete_form = DeleteForm(request.POST or None, folders=folders, files=files)
@@ -197,7 +199,7 @@ def search(request):
 def user_search(request):
     form = SearchForm(request.POST or None)
     context = {'form':form, "MEDIA_URL":settings.MEDIA_URL,}
-    return render(request, 'searcher/user-search.html', context)
+    return render(request, 'searcher/index.html', context)
 
 
 def search_ajax(request):
