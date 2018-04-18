@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="searcher">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} Filer {% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}/favicon.ico" />
+    <link href="{% static 'searcher/css/index.css' %}" rel="stylesheet">
+    <link href="{% static 'searcher/css/body.css' %}" rel="stylesheet">
+</head>
+
+<style>
+.full-h {
+height: 100vh !important;
+min-height: 100vh !imortant; }
+</style>
+
+<style>
+.mfbg {
+  animation:slide 3s ease-in-out infinite alternate;
+  background-image: linear-gradient(-60deg, #6353DC 50%, #6A00FF 50%);
+  bottom:0;
+  left:-50%;
+  opacity:.5;
+  position:fixed;
+  right:-50%;
+  top:0;
+  z-index:-1;
+}
+
+.mfbg2 {
+  animation-direction:alternate-reverse;
+  animation-duration:4s;
+}
+
+.mfbg3 {
+  animation-duration:5s;
+}
+
+@keyframes slide {
+  0% {
+    transform:translateX(-25%);
+  }
+  100% {
+    transform:translateX(25%);
+  }
+}
+</style>
+
+<style>
+.centered {
+	    position: absolute;
+	    top: 35%;
+	    left: 50%;
+	    width: 2000px;
+	    height: 0;
+	    margin: 0 0 0 -1000px;
+}
+</style>
+
+<style>
+.wrapper { 
+    width:50%;
+        margin:0 auto;
+    }
+</style>
+
+<style>
+.wrapper2 { 
+    width:50%;
+    height:95%;
+    margin:0 auto;
+    }
+</style>
+
+<style>
+.wrapper3 { 
+margin:10%;
+}
+</style>
+
+<style>
+    /* ��������� ������ �������� */
+.search .submit {
+  /* ������������� ������ ��������� �� ������� ���� ����� */
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 37px;
+
+  /* ����������� ������ �� ��� ������ ����� */
+  height: 100%;
+
+  cursor: pointer;
+  background: url({% static 'searcher/img/go.png' %}) 50% no-repeat;
+
+  /* ��������� ������������ ������ �������� */
+  opacity: 0.5;
+}
+
+</style>
+
+<body>
+<div align="center" class="wrapper3">
+<img width="15%" src="{% static 'searcher/img/logo-big.png' %}"></div>
+
+
+<div class="centered">
+
+
+
+<div class="mfbg"></div>
+<div class="mfbg mfbg2"></div>
+<div class="mfbg mfbg3"></div>
+<div class="full-h clearfix" id="page">
+
+
+
+<p align="center" style="font-size:12px"> <font color="e4d8fd">
+��� ������� ������ ������ � ���� ����� �������-������,
+<br>
+������� ����� ��� ����-��� ������� �����, �� ���������� �� �����.</font></p>
+<center>
+
+<form action="/create_post/" method="GET" class="search" id="search-form">
+  <input type="search" name="" id='search-text' placeholder="�����..." class="input" />
+  <input type="submit" name="" value="" class="submit" />
+</form>
+
+</center>
+
+
+
+<div align="center" class="wrapper2">
+
+    <!-- Here is search resultrs are going to apear -->
+    <ul id=search_result> </ul>
+
+<table cellpadding="1" cellspacing="1" style="width: 50%; height: 40%;"> 
+<tbody> 
+<tr>  
+  <td> 
+
+  <div id="container"> 
+  <div id="content-slideshow"> 
+
+
+  <div id="slideshow"> 
+  <div id="mask"> 
+  <ul> 
+  <li id="first" class="first-animation"> 
+<p align="center" style="font-size:12px">  <font color="e4d8fd">
+<strong>TIP:</strong> �� ������ ������ ����� ������, �������������� ������� �������-����� ������� ������������� 2,5%�<br>
+� � �
+</font>
+</p>
+
+  <li id="second" class="second-animation"> 
+<p align="center" style="font-size:12px">  <font color="e4d8fd">
+<strong>TIP:</strong> �� ������ ������ ����� �������, ���ϔ, �������� ������� �������-����� �qualiko�<br>
+� � �
+</font>
+</p>
+   
+  <li id="third" class="third-animation"> 
+<p align="center" style="font-size:12px">  <font color="e4d8fd">
+<strong>TIP:</strong> �� ������ ������ ����� ���������, �����, ��������� ������� �������-����� �������� �DADA�<br>
+� � �
+</font>
+</p>
+
+</li> 
+</ul> 
+</div> 
+</div> 
+</div> 
+</div> 
+</td> 
+</tr> 
+
+
+</tbody> 
+</table>
+
+</div>
+</div>
+</div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'searcher/vendor/jquery/jquery.min.js' %}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'searcher/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <!-- Custom fonts for this template-->
+    <script defer src="{% static 'searcher/vendor/font-awesome/fontawesome-all.js' %}"></script>
+    <!-- ajax for dynamic search -->
+    <script>
+        // AJAX for posting
+        function search() {
+            console.log("search is working!") // sanity check
+            $.ajax({
+                url : "{% url 'searcher:search_ajax' %}", // the endpoint
+                type : "GET", // http method
+                data : { search_text : $('#search-text').val() }, // data sent with the post request
+
+                // handle a successful response
+                success : function(json) {
+                    $('#search-text').val(''); // remove the value from the input
+                    console.log(json); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                    var folders = "";
+                    for (var f in json.folders)
+                    {
+                        folders = folders + "<li> Папка: " + json.folders[f].name + "</li>";
+                    }
+                    var files = "";
+                    for (var f in json.files)
+                    {
+                        files = files + "<li> Файл: " + json.files[f].name + "</li>";
+                    }
+                    $('#search_result').empty();
+                    $('#search_result').append(folders, files);
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+
+        // Submi search on submit
+        $('#search-form').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            search();
+        });
+
+    </script>
+</body>
+
+</html>

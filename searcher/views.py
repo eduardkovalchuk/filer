@@ -192,7 +192,6 @@ def search(request):
         return render(request, "searcher/search.html", context)
 
 
-
 #--------------------------------------------------------------------------------------------------
 # User views
 

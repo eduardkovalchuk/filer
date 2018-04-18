@@ -1,0 +1,7 @@
+curl -s --user 'api:key-471b018b41a355b11fb483f8ba123783'    
+ https://api.mailgun.net/v3/sandboxb2f27ab350c94a4ebe43afa16c78f327.mailgun.org/messages        
+-F from='Mailgun Sandbox <postmaster@sandboxb2f27ab350c94a4ebe43afa16c78f327.mailgun.org>'
+-F to='Eduard Kovalchuk <edward.kovalchuk11@gmail.com>'
+-F subject='Hello Eduard Kovalchuk'
+-F text='Congratulations Eduard Kovalchuk, you just sent an email with Mailgun!  You are truly awesome!'
+
